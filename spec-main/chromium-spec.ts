@@ -10,7 +10,7 @@ import * as url from 'url';
 import * as ChildProcess from 'child_process';
 import { EventEmitter } from 'events';
 import { promisify } from 'util';
-import { ifit, ifdescribe, delay, defer } from './spec-helpers';
+import { ifit, ifdescribe, delay } from './spec-helpers';
 import { AddressInfo } from 'net';
 import { PipeTransport } from './pipe-transport';
 
@@ -565,11 +565,10 @@ describe('chromium features', () => {
           w.show();
         }
 
-        defer(() => { w.close(); });
-
         const newWindow = emittedOnce(w.webContents, 'new-window');
         w.loadFile(path.join(fixturesPath, 'pages', 'window-open.html'));
         const [,,,, options] = await newWindow;
+        w.close();
         expect(options.show).to.equal(w.isVisible());
       });
     }
